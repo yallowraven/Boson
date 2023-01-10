@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Boson</Title>
+	<Version>1.0.1</Version>
     <PackageProjectUrl>https://github.com/yallowraven/Boson</PackageProjectUrl>
     <Description>A simple low-level networking library</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
