@@ -1,10 +1,32 @@
-﻿namespace Boson;
+﻿using System.Net.Sockets;
+
+namespace Boson;
 
 public class TcpChannel : Channel
 {
     public TcpChannel(ChannelAddressFamily addressFamily = ChannelAddressFamily.IPv4) : base(ChannelProtocol.Tcp, addressFamily)
+    { }
+
+    protected TcpChannel(Socket socket) : base(socket)
     {
+        //TODO: better exceptions
+        if (socket.AddressFamily is not (AddressFamily.InterNetwork or AddressFamily.InterNetworkV6))
+            throw new Exception(
+                $"A TcpChannel cannot be created from a Socket with address family {socket.AddressFamily}.");
+
+        if (socket.SocketType is not SocketType.Stream)
+            throw new Exception(
+                $"A TcpChannel cannot be created from a Socket with socket type {socket.SocketType}.");
+
+        if (socket.ProtocolType is not ProtocolType.Tcp)
+            throw new Exception(
+                $"A TcpChannel cannot be created from a Socket with protocol type {socket.ProtocolType}.");
     }
+
+    public static Result<TcpChannel> Create(ChannelAddressFamily addressFamily = ChannelAddressFamily.IPv4) =>
+        Result<TcpChannel>.Wrap(() => new(addressFamily));
+
+    public new Result<TcpChannel> Accept() => Result<TcpChannel>.Wrap(() => new(Socket.Accept()));
 
     public Result ReceiveSizedBlock(Span<byte> block)
     {

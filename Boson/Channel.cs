@@ -41,7 +41,7 @@ public class Channel : IDisposable
     {
     }
 
-    Channel(Socket socket)
+    protected Channel(Socket socket)
     {
         Socket = socket;
     }
